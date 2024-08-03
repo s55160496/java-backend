@@ -1,15 +1,41 @@
 Spring:
+  mail :
+    host : smtp.gmail.com
+    port : 587
+    username : phongsawattest99
+    password : moowfnjkfzkpueah
+    properties :
+      mail :
+        smtp :
+          auth : true
+          starttls :
+              enable : true
+
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
   datasource:
+    platform: postgres
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: syspass
-
-    jpa:
-      hibernate:
-        ddl-auto: update
+  driverClassName: org.postgresql.Driver
 
   Servlet:
     multipart:
       enabled: true
       max-file-size: 2MB
       max-request-size: 5MB
+
+app:
+  token:
+    secret : m#MySecretGGWP2024
+    issuer : BackendService
+  email :
+    from : phongsawattest99@gmail.com
+
+

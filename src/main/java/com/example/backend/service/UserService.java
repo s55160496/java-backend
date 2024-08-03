@@ -25,10 +25,29 @@ public class UserService {
     public Optional<User> findByEmail(String email){
         return  repository.findByEmail(email);
     }
+    public Optional<User> findById(String Id){
+        return  repository.findById(Id);
+    }
+    
+    public User update(User user){
+        return repository.save(user);
+    }
+
+    public User updateName(String id , String name) throws UserException {
+        Optional<User> opt = repository.findById(id);
+        if(opt.isEmpty()){
+           throw UserException.notFound();
+        }
+
+        User user = opt.get();
+        user.setName(name);
+        return repository.save(user);
+    }
 
     public  boolean matchPassword(String rawPassword,String encodedPassword){
         return passwordEncoder.matches(rawPassword,encodedPassword);
     }
+
 
     public User create(String email,String password,String name) throws BaseException {
 
@@ -54,6 +73,10 @@ public class UserService {
         entity.setPassword(passwordEncoder.encode(password));
         entity.setName(name);
         return repository.save(entity);
+    }
+
+    public void deleteById(String id){
+        repository.deleteById(id);
     }
 
 

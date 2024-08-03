@@ -39,6 +39,12 @@ public class UserApi {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("refresh-token")
+    public ResponseEntity<String> refreshToken() throws BaseException {
+        String token = business.refreshToken();
+        return ResponseEntity.ok(token);
+    }
+
     @PostMapping
     public ResponseEntity<String> uploadProfilePicture(@RequestPart MultipartFile file) throws BaseException, IOException {
         String response = business.UploadProfilePicture(file);

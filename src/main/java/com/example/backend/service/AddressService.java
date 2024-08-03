@@ -1,41 +1,54 @@
 package com.example.backend.service;
 
-import com.example.backend.entity.Social;
+import com.example.backend.entity.Address;
 import com.example.backend.entity.User;
-import com.example.backend.exception.BaseException;
-import com.example.backend.exception.UserException;
-import com.example.backend.repository.SocialRepository;
-import com.example.backend.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.backend.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
-public class SocialService {
+public class AddressService {
 
-    private final SocialRepository repository;
+    private final AddressRepository repository;
 
-    public SocialService(SocialRepository repository) {
+    public AddressService(AddressRepository repository) {
         this.repository = repository;
     }
 
 
-    public Optional<Social> findByUser(User user){
-        return  repository.findByUser(user);
+    public List<Address> findByUser(User user) {
+        return repository.findByUser(user);
     }
 
-    public Social create (User user,String facebook,String line,String instagram,String tiktok){
-        Social entity = new Social();
+    public Address create(User user, String line1, String line2, String zipcode) {
+        Address entity = new Address();
 
         entity.setUser(user);
-        entity.setFacebook(facebook);
-        entity.setLine(line);
-        entity.setInstagram(instagram);
-        entity.setTiktok(tiktok);
+        entity.setLine1(line1);
+        entity.setLine2(line2);
+        entity.setZipcode(zipcode);
 
-        return  repository.save(entity);
+        return repository.save(entity);
     }
+//
+//    public List<Address> createArr(User user, List<Address> addressList) {
+//
+//        List<Address> enList= new ArrayList<>();
+//        addressList.forEach(address -> {
+//            Address entity = new Address();
+//
+//            entity.setUser(user);
+//            entity.setLine1(address.getLine1());
+//            entity.setLine2(address.getLine2());
+//            entity.setZipcode(address.getZipcode());
+//            enList.add(entity);
+//            //repository.save(entity);
+//        });
+//
+//        return repository.saveAll(enList);
+//    }
 
 }

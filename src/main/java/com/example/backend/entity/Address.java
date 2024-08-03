@@ -1,30 +1,24 @@
 package com.example.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity(name = "m_social")
-public class Social extends BaseEntity {
+@Entity(name = "m_address")
+public class Address extends BaseEntity {
 
     @Column(length = 120)
-    private String facebook;
+    private String line1;
 
     @Column(length = 120)
-    private String line;
+    private String line2;
 
     @Column(length = 120)
-    private String instagram;
+    private String zipcode;
 
-    @Column(length = 120)
-    private String tiktok;
-
-    @OneToOne
-    @JoinColumn(name = "m_user_id")
-    private  User user;
+    @ManyToOne
+    @JoinColumn(name = "m_user_id",nullable = false)
+    private User user;
 }
