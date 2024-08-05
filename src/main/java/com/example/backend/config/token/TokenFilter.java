@@ -31,16 +31,16 @@ public class TokenFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String auth = request.getHeader("Authorization");
-        if (ObjectUtils.isEmpty(auth)) {
+        String authorization = request.getHeader("Authorization");
+        if (ObjectUtils.isEmpty(authorization)) {
             filterChain.doFilter(servletRequest, servletResponse);
         }
 
-        if (!auth.startsWith("Bearer")) {
+        if (!authorization.startsWith("Bearer")) {
             filterChain.doFilter(servletRequest, servletResponse);
         }
 
-        String token = auth.substring(7);
+        String token = authorization.substring(7);
         DecodedJWT decodedJWT = tokenService.verify(token);
         if (decodedJWT == null) {
             filterChain.doFilter(servletRequest, servletResponse);
