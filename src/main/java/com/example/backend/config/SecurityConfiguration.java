@@ -25,8 +25,8 @@ public class SecurityConfiguration {
             "/actuator/**",
             "/user/register",
             "/user/login",
-            "/socket/**"
-
+            "/socket/**",
+           // "/chat/**", //TODO : remove from config (Security Reason)
     };
 
 
@@ -44,7 +44,7 @@ public class SecurityConfiguration {
         http.cors(config -> {
                     CorsConfiguration cors = new CorsConfiguration();
                     cors.setAllowCredentials(true);
-                    cors.setAllowedOriginPatterns(Collections.singletonList("*"));
+                    cors.setAllowedOriginPatterns(Collections.singletonList("http://localhost*"));
                     cors.addAllowedHeader("*");
                     cors.addAllowedMethod("GET");
                     cors.addAllowedMethod("POST");
@@ -57,27 +57,14 @@ public class SecurityConfiguration {
 
                     config.configurationSource(source);
                 }).csrf(csrf -> csrf.disable())
-                .authorizeRequests(authorize -> authorize
+                .authorizeRequests(
+                        authorize -> authorize
+                                //.anyRequest().permitAll()
                         .requestMatchers(PUBLIC).anonymous() // Ensure PUBLIC is defined correctly
-                        .anyRequest().authenticated()
+                       .anyRequest().authenticated()
                 )
                 .addFilterBefore(new TokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("http://localhost:4200");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("OPTIONS");
-//        config.addAllowedMethod("POST");
-//        config.addAllowedMethod("GET");
-//        config.addAllowedMethod("PUT");
-//        config.addAllowedMethod("DELETE");
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
 }

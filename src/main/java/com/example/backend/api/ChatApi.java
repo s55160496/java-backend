@@ -21,7 +21,7 @@ public class ChatApi {
     }
 
 
-    @PostMapping("/meassage")
+    @PostMapping("/message")
     public ResponseEntity<String> post(@RequestBody ChatMessageRequest request) throws BaseException {
         chatBusiness.post(request);
         return ResponseEntity.status(HttpStatus.OK).build();

@@ -6,6 +6,7 @@ import com.example.backend.exception.FileException;
 import com.example.backend.exception.UserException;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.MLoginRequest;
+import com.example.backend.model.MLoginResponse;
 import com.example.backend.model.MRegisterRequest;
 import com.example.backend.model.MRegisterResponse;
 import com.example.backend.service.TokenService;
@@ -37,7 +38,7 @@ public class UserBusiness {
         this.tokenService = tokenService;
     }
 
-    public String login(MLoginRequest request) throws BaseException {
+    public MLoginResponse login(MLoginRequest request) throws BaseException {
 
         // validate Request
 
@@ -54,14 +55,12 @@ public class UserBusiness {
             //throw password incorrect
             throw UserException.LoginFailPasswordIncorrect();
         }
-
-        return tokenService.tokenize(user);
+        MLoginResponse response = new MLoginResponse();
+        response.setToken(tokenService.tokenize(user));
+        return  response;
     }
 
    public  String refreshToken() throws BaseException {
-//       SecurityContext context = SecurityContextHolder.getContext();
-//       Authentication authentication = context.getAuthentication();
-//       String UserId = (String) authentication.getPrincipal();
        Optional<String> opt = SecurityUtil.getCurrentUserId();
        if(opt.isEmpty()){
            throw  UserException.notFound();

@@ -34,10 +34,12 @@ public class TokenFilter extends GenericFilterBean {
         String authorization = request.getHeader("Authorization");
         if (ObjectUtils.isEmpty(authorization)) {
             filterChain.doFilter(servletRequest, servletResponse);
+            return;
         }
 
         if (!authorization.startsWith("Bearer")) {
             filterChain.doFilter(servletRequest, servletResponse);
+            return;
         }
 
         String token = authorization.substring(7);
@@ -47,6 +49,7 @@ public class TokenFilter extends GenericFilterBean {
             return;
         }
 
+        // user id
         String principal = decodedJWT.getClaim("principal").asString();
         String role = decodedJWT.getClaim("role").asString();
 
@@ -63,11 +66,6 @@ public class TokenFilter extends GenericFilterBean {
         // Set the authentication token in the security context
         securityContext.setAuthentication(authenticationToken);
         filterChain.doFilter(servletRequest, servletResponse); // ***
-
-//        UsernamePasswordAuthenticationToken AuthenticationToken= new UsernamePasswordAuthenticationToken(principal,"(protected)",authorities);
-//
-//       SecurityContextHolder securityContext = (SecurityContextHolder) SecurityContextHolder.getContext();
-//       securityContext.setContext((SecurityContext) AuthenticationToken);
 
     }
 

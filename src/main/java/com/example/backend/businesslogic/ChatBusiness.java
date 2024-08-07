@@ -20,23 +20,21 @@ public class ChatBusiness {
     }
 
     public void post(ChatMessageRequest request) throws BaseException {
-        final String destination = "chat";
-
         Optional<String> opt = SecurityUtil.getCurrentUserId();
 
         if (opt.isEmpty()) {
             throw ChatException.accessDenied();
         }
 
-        //TODO validate message
+        // TODO: validate message
+
+        final String destination = "/topic/chat";
 
         ChatMessage payload = new ChatMessage();
         payload.setFrom(opt.get());
         payload.setMessage(request.getMessage());
 
-        template.convertAndSend(destination,payload);
-
-
+        template.convertAndSend(destination, payload);
     }
 
 }
