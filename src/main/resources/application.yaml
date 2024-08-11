@@ -1,16 +1,10 @@
+server :
+  port : 8080
 Spring:
-  mail :
-    host : smtp.gmail.com
-    port : 587
-    username : phongsawattest99
-    password : moowfnjkfzkpueah
-    properties :
-      mail :
-        smtp :
-          auth : true
-          starttls :
-              enable : true
-
+  kafka :
+    boostrap-servers : localhost:9092
+    consumer :
+      group-id : "my-awesome-app"
 
   jpa:
     database: POSTGRESQL

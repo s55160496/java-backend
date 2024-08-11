@@ -5,34 +5,41 @@ import com.example.backend.exception.BaseException;
 import com.example.backend.exception.FileException;
 import com.example.backend.exception.UserException;
 import com.example.backend.mapper.UserMapper;
-import com.example.backend.model.MLoginRequest;
-import com.example.backend.model.MLoginResponse;
-import com.example.backend.model.MRegisterRequest;
-import com.example.backend.model.MRegisterResponse;
+import com.example.backend.model.*;
 import com.example.backend.service.TokenService;
 import com.example.backend.service.UserService;
 import com.example.backend.util.SecurityUtil;
+import com.example.common.EmailRequest;
+import io.netty.util.internal.StringUtil;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
+@Log4j2
 @Service
 public class UserBusiness {
 
+    private final EmailBusiness emailBusiness;
     private final UserService userService;
     private final UserMapper userMapper;
     private final TokenService tokenService;
 
-
-    public UserBusiness(UserService userService, UserMapper userMapper, TokenService tokenService) {
+    public UserBusiness(EmailBusiness emailBusiness, UserService userService, UserMapper userMapper, TokenService tokenService) {
+        this.emailBusiness = emailBusiness;
         this.userService = userService;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
@@ -51,10 +58,18 @@ public class UserBusiness {
         }
 
         User user = opt.get();
+
+        //verify password
         if (!userService.matchPassword(request.getPassword(), user.getPassword())) {
             //throw password incorrect
             throw UserException.LoginFailPasswordIncorrect();
         }
+
+        //validate activate status
+if(!user.isActivated()){
+    throw UserException.LoginFailUserUnactivated();
+}
+
         MLoginResponse response = new MLoginResponse();
         response.setToken(tokenService.tokenize(user));
         return  response;
@@ -78,11 +93,95 @@ public class UserBusiness {
 
 
     public MRegisterResponse register(MRegisterRequest request) throws BaseException {
-        User user = userService.create(request.getEmail(), request.getPassword(), request.getName());
+        String token = SecurityUtil.generateToken();
+        User user = userService.create(request.getEmail(), request.getPassword(), request.getName(),token,nextMinute(30));
 
         //TO DO Mapper
+        sendEmail(user);
 
         return userMapper.toRegisterResponse(user);
+    }
+
+
+
+    public MActivateResponse activate (MActivateRequest request) throws BaseException {
+        String token = request.getToken();
+        if(StringUtil.isNullOrEmpty(token)){
+            throw UserException.activateNoToken();
+        }
+
+        Optional<User> opt = userService.findByToken(token);
+
+        if(opt.isEmpty()){
+            throw UserException.activateFail();
+        }
+
+        User user = opt.get();
+
+        if(user.isActivated()){
+            throw UserException.activateAlready();
+        }
+
+        Date now = new Date();
+        Date expireDate = user.getTokenExpire();
+        if(now.after(expireDate)){
+
+            //TODO re-email
+
+            throw UserException.activateTokenExpire();
+        }
+        user.setActivated(true);
+        userService.update(user);
+
+        MActivateResponse mActivateResponse = new MActivateResponse();
+        mActivateResponse.setSuccess(true);
+        return mActivateResponse;
+    }
+
+    public  void resendActivationEmail(MResendActivationEmailRequest request) throws BaseException {
+        String email = request.getEmail();
+if(StringUtil.isNullOrEmpty(email)){
+throw UserException.resendActivateionEmailNoEmail();
+}
+
+        Optional<User> opt = userService.findByEmail(email);
+
+        if(opt.isEmpty()){
+            throw UserException.resendActivateionEmailNotFound();
+        }
+
+        User user = opt.get();
+
+        if(user.isActivated()){
+            throw UserException.activateAlready();
+        }
+
+        user.setToken(SecurityUtil.generateToken());
+        user.setTokenExpire(nextMinute(30));
+
+        user = userService.update(user);
+
+        sendEmail(user);
+
+    }
+
+    private Date nextMinute(int minute){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,minute);
+        return calendar.getTime();
+    }
+
+    private void sendEmail(User user){
+
+        // TODO Generate Token
+        String token = user.getToken();
+
+        try {
+            emailBusiness.sendActivateUserEmail(user.getEmail(),user.getName(),token);
+        } catch (BaseException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

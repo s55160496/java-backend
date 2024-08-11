@@ -41,4 +41,33 @@ public class UserException extends BaseException{
     public static UserException LoginFailPasswordIncorrect(){
         return new UserException("login.fail.email.incorrect");
     }
+    public static UserException LoginFailUserUnactivated(){
+        return new UserException("login.fail.unactivated");
+    }
+
+    //Activate
+    public static UserException activateNoToken(){
+        return new UserException("activate.no.token");
+    }
+    public static UserException activateFail(){
+        return new UserException("activate.fail");
+    }
+
+    public static UserException activateAlready(){
+        return new UserException("activate.already");
+    }
+
+    public static UserException activateTokenExpire(){
+        return new UserException("activate.token.expire");
+    }
+
+    //RESEND ACTIVATION EMAIL
+
+    public static UserException resendActivateionEmailNoEmail(){
+        return new UserException("resend.activation.no.email");
+    }
+
+    public static UserException resendActivateionEmailNotFound(){
+        return new UserException("resend.activation.fail");
+    }
 }

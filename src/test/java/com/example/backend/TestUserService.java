@@ -8,10 +8,12 @@ import com.example.backend.exception.UserException;
 import com.example.backend.service.AddressService;
 import com.example.backend.service.SocialService;
 import com.example.backend.service.UserService;
+import com.example.backend.util.SecurityUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +33,8 @@ class TestUserService {
     @Test
     @Order(1)
     void testCreate() throws BaseException {
-        User user = userService.create(TestCreateData.email, TestCreateData.password, TestCreateData.name);
+        String token = SecurityUtil.generateToken();
+        User user = userService.create(TestCreateData.email, TestCreateData.password, TestCreateData.name,token,new Date());
 
         // check not null
         Assertions.assertNotNull(user);

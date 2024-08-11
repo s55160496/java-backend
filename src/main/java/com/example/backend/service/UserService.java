@@ -4,9 +4,12 @@ import com.example.backend.entity.User;
 import com.example.backend.exception.BaseException;
 import com.example.backend.exception.UserException;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.util.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -25,8 +28,13 @@ public class UserService {
     public Optional<User> findByEmail(String email){
         return  repository.findByEmail(email);
     }
+
     public Optional<User> findById(String Id){
         return  repository.findById(Id);
+    }
+
+    public Optional<User> findByToken(String token){
+        return  repository.findByToken(token);
     }
     
     public User update(User user){
@@ -49,7 +57,7 @@ public class UserService {
     }
 
 
-    public User create(String email,String password,String name) throws BaseException {
+    public User create(String email,String password,String name,String token,Date expireDate) throws BaseException {
 
         //Validate
         if(Objects.isNull(email)){
@@ -72,6 +80,8 @@ public class UserService {
         entity.setEmail(email);
         entity.setPassword(passwordEncoder.encode(password));
         entity.setName(name);
+        entity.setToken(token);
+        entity.setTokenExpire(expireDate);
         return repository.save(entity);
     }
 
