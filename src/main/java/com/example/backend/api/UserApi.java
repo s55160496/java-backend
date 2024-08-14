@@ -46,7 +46,7 @@ public class UserApi {
 
     @PostMapping("/resend-activation-email")
     public ResponseEntity<Void> activate(@RequestBody MResendActivationEmailRequest request) throws BaseException {
-       business.resendActivationEmail(request);
+        business.resendActivationEmail(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -60,6 +60,24 @@ public class UserApi {
     public ResponseEntity<String> uploadProfilePicture(@RequestPart MultipartFile file) throws BaseException, IOException {
         String response = business.UploadProfilePicture(file);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<MUserProfile> getUserProfile() throws BaseException {
+        MUserProfile userProfile = business.getUserProfile();
+        return ResponseEntity.ok(userProfile);
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<MUserProfile> updateUserProfile(@RequestBody MUpdateProfileRequest request) throws BaseException {
+        MUserProfile userProfile = business.updateUserProfile(request);
+        return ResponseEntity.ok(userProfile);
+    }
+
+    @DeleteMapping("/test-delete")
+    public ResponseEntity<Void> deleteAccount() throws BaseException {
+        business.deleteAccountById();
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 @Log4j2
 public class EmailBusiness {
 
-    private final KafkaTemplate<String,EmailRequest> Kafkatemplate;
+    private final KafkaTemplate<String, EmailRequest> Kafkatemplate;
 
     public EmailBusiness(KafkaTemplate<String, EmailRequest> kafkatemplate) {
         Kafkatemplate = kafkatemplate;
@@ -37,9 +37,9 @@ public class EmailBusiness {
 
         log.info("Token = " + token);
 
-        String finallink = "http//localhost:4200/activate/"+ token;
-        html  = html.replace("${P_NAME}",name);
-        html  = html.replace("${P_LINK}",finallink);
+        String finallink = "http://localhost:4200/activate/" + token;
+        html = html.replace("${P_NAME}", name);
+        html = html.replace("${P_LINK}", finallink);
 
 
         EmailRequest request = new EmailRequest();
@@ -61,7 +61,7 @@ public class EmailBusiness {
                     log.info(result);
                 });
 
-      //  emailService.Send(email, subject, html);
+        //  emailService.Send(email, subject, html);
 
     }
 

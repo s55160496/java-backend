@@ -28,6 +28,7 @@ public class SecurityConfiguration {
             "/socket/**",
             "/user/activate",
             "/user/resend-activation-email",
+            "/chat/**"
            // "/chat/**", //TODO : remove from config (Security Reason)
     };
 

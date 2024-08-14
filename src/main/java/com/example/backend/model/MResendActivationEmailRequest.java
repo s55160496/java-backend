@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class MResendActivationEmailRequest {
-    private String Email;
+    private String token;
 }

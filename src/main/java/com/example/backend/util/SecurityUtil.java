@@ -13,39 +13,39 @@ import java.util.Optional;
 
 public class SecurityUtil {
 
-    private SecurityUtil(){
+    private SecurityUtil() {
 
     }
 
-    public static String generateToken(){
-    // create character rules to generate passwords with
+    public static String generateToken() {
+        // create character rules to generate passwords with
 
         List<CharacterRule> rules = new ArrayList<CharacterRule>();
 
-        rules.add(new CharacterRule(EnglishCharacterData.UpperCase,10));
+        rules.add(new CharacterRule(EnglishCharacterData.UpperCase, 10));
 
-        rules.add(new CharacterRule(EnglishCharacterData.LowerCase,10));
+        rules.add(new CharacterRule(EnglishCharacterData.LowerCase, 10));
 
-        rules.add(new CharacterRule(EnglishCharacterData.Digit,5));
+        //rules.add(new CharacterRule(EnglishCharacterData.Digit, 10));
 
-        rules.add(new CharacterRule(EnglishCharacterData.Special,5));
+        // rules.add(new CharacterRule(EnglishCharacterData.Special,5));
 
         PasswordGenerator generator = new PasswordGenerator();
-        return  generator.generatePassword(30,rules);
+        return generator.generatePassword(20, rules);
     }
 
-    public static Optional<String> getCurrentUserId(){
+    public static Optional<String> getCurrentUserId() {
         SecurityContext context = SecurityContextHolder.getContext();
-        if(context ==null){
+        if (context == null) {
             return Optional.empty();
         }
         Authentication authentication = context.getAuthentication();
-        if(authentication ==null){
+        if (authentication == null) {
             return Optional.empty();
         }
         String principal = (String) authentication.getPrincipal();
 
-        if(principal ==null){
+        if (principal == null) {
             return Optional.empty();
         }
 

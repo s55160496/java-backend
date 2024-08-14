@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity(name = "m_address")
-public class Address extends BaseEntity {
+public class Address extends BaseEntity  implements Serializable {
 
     @Column(length = 120)
     private String line1;

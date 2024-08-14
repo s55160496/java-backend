@@ -1,10 +1,18 @@
-server :
-  port : 8080
+server:
+  port: 8080
 Spring:
-  kafka :
-    boostrap-servers : localhost:9092
-    consumer :
-      group-id : "my-awesome-app"
+  kafka:
+    boostrap-servers: localhost:9092
+    consumer:
+      group-id: "my-awesome-app"
+
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000
 
   jpa:
     database: POSTGRESQL
@@ -27,9 +35,9 @@ Spring:
 
 app:
   token:
-    secret : m#MySecretGGWP2024
-    issuer : BackendService
-  email :
-    from : phongsawattest99@gmail.com
+    secret: m#MySecretGGWP2024
+    issuer: BackendService
+  email:
+    from: phongsawattest99@gmail.com
 
 
