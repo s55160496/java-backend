@@ -2,13 +2,13 @@ server:
   port: 8080
 Spring:
   kafka:
-    boostrap-servers: localhost:9092
+    boostrap-servers: ${SECRET_KAFKA_HOST:localhost}:${SECRET_KAFKA_PORT:9092}
     consumer:
       group-id: "my-awesome-app"
 
   redis:
-    host: localhost
-    port: 6379
+    host: ${SECRET_DB_REDIS_HOST:localhost}
+    port: ${SECRET_DB_REDIS_PORT:6379}
   cache:
     type: redis
     redis:
@@ -22,9 +22,9 @@ Spring:
 
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: syspass
+    url: jdbc:postgresql://${SECRET_DB_HOST:localhost}:${SECRET_DB_PORT:5432}/postgres
+    username: ${SECRET_DB_USERNAME:postgres}
+    password: ${SECRET_DB_PASSWORD:syspass}
   driverClassName: org.postgresql.Driver
 
   Servlet:
@@ -35,9 +35,7 @@ Spring:
 
 app:
   token:
-    secret: m#MySecretGGWP2024
+    secret: ${SECRET_JWT_SECRET:'m#MySecretGGWP2024'}
     issuer: BackendService
-  email:
-    from: phongsawattest99@gmail.com
 
 
