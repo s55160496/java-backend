@@ -29,9 +29,9 @@ public class SecurityConfiguration {
             "/user/activate",
             "/user/resend-activation-email",
             "/chat/**"
-           // "/chat/**", //TODO : remove from config (Security Reason)
+            // "/chat/**", //TODO : remove from config (Security Reason)
     };
-
+    
 
     public SecurityConfiguration(TokenService tokenService) {
         this.tokenService = tokenService;
@@ -62,9 +62,8 @@ public class SecurityConfiguration {
                 }).csrf(csrf -> csrf.disable())
                 .authorizeRequests(
                         authorize -> authorize
-                                //.anyRequest().permitAll()
-                        .requestMatchers(PUBLIC).anonymous() // Ensure PUBLIC is defined correctly
-                       .anyRequest().authenticated()
+                                .requestMatchers(PUBLIC).permitAll()
+                                .anyRequest().authenticated()
                 )
                 .addFilterBefore(new TokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         return http.build();

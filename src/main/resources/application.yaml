@@ -7,8 +7,8 @@ Spring:
       group-id: "my-awesome-app"
 
   redis:
-    host: ${SECRET_DB_REDIS_HOST:localhost}
-    port: ${SECRET_DB_REDIS_PORT:6379}
+    host: ${SECRET_REDIS_HOST:localhost}
+    port: ${SECRET_REDIS_PORT:6379}
   cache:
     type: redis
     redis:

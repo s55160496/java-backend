@@ -87,7 +87,7 @@ public class UserBusiness {
         User user = userService.create(request.getEmail(), request.getPassword(), request.getName(), token, nextMinute(30));
 
         //TO DO Mapper
-        sendEmail(user);
+        //sendEmail(user);
 
         return userMapper.toRegisterResponse(user);
     }
@@ -151,7 +151,7 @@ public class UserBusiness {
 
         user = userService.update(user);
 
-        sendEmail(user);
+        //sendEmail(user);
 
     }
 
@@ -161,18 +161,18 @@ public class UserBusiness {
         return calendar.getTime();
     }
 
-    private void sendEmail(User user) {
-
-        // TODO Generate Token
-        String token = user.getToken();
-
-        try {
-            emailBusiness.sendActivateUserEmail(user.getEmail(), user.getName(), token);
-        } catch (BaseException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
+//    private void sendEmail(User user) {
+//
+//        // TODO Generate Token
+//        String token = user.getToken();
+//
+//        try {
+//            emailBusiness.sendActivateUserEmail(user.getEmail(), user.getName(), token);
+//        } catch (BaseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
     public MUserProfile getUserProfile() throws BaseException {
         Optional<String> opt = SecurityUtil.getCurrentUserId();

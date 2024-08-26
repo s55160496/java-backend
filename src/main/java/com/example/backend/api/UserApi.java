@@ -5,6 +5,7 @@ import com.example.backend.exception.BaseException;
 import com.example.backend.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class UserApi {
     public ResponseEntity<String> testPostRequest() {
         return ResponseEntity.ok("POST request successful");
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<MLoginResponse> login(@RequestBody MLoginRequest request) throws BaseException {
@@ -50,6 +52,7 @@ public class UserApi {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+
     @GetMapping("refresh-token")
     public ResponseEntity<String> refreshToken() throws BaseException {
         String token = business.refreshToken();
@@ -62,6 +65,7 @@ public class UserApi {
         return ResponseEntity.ok(response);
     }
 
+    // @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/profile")
     public ResponseEntity<MUserProfile> getUserProfile() throws BaseException {
         MUserProfile userProfile = business.getUserProfile();

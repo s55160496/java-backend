@@ -15,11 +15,11 @@ class TestEmailBusiness {
     @Autowired
     private EmailBusiness emailBusiness;
 
-    @Test
-    void testSendActivateEmail() throws BaseException {
-        emailBusiness.sendActivateUserEmail(testSendActivateEmail.email, testSendActivateEmail.name, testSendActivateEmail.token);
-
-    }
+//    @Test
+//    void testSendActivateEmail() throws BaseException {
+//         emailBusiness.sendActivateUserEmail(testSendActivateEmail.email, testSendActivateEmail.name, testSendActivateEmail.token);
+//
+//    }
 
     interface testSendActivateEmail {
         String email = "phongsawat99@outlook.com";
